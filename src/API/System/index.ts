@@ -17,7 +17,7 @@ export default class System extends Main {
    */
   public killExcel: TFnKillExcel = async () => {
     try {
-      const result: any = await cmd("powershell.exe", [`${process.env.APP_ROOT}/scripts/getCurrentUserName.ps1`], { shell: true });
+      const result: any = await cmd("powershell.exe", [`${process.env.APP_ROOT}/src/Scripts/getCurrentUserName.ps1`], { shell: true });
 
       await this.TeleDroid.sendToLogsNew({
         place: "System.killExcel",
@@ -27,7 +27,7 @@ export default class System extends Main {
         hashtags: ["killExcel", "history"]
       });
 
-      await cmd("powershell.exe", [`${process.env.APP_ROOT}/scripts/killExcel.ps1`], { shell: true });
+      await cmd("powershell.exe", [`${process.env.APP_ROOT}/src/Scripts/killExcel.ps1`], { shell: true });
 
 
       await this.TeleDroid.sendToLogsNew({
