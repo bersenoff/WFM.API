@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: "api",
+      name: "api2",
       script: "build/index.js",
       args: " --max-old-space-size=8192",
       watch: ["build"],
