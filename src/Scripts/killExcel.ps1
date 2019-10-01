@@ -1,0 +1,1 @@
+Get-Process -Name excel -IncludeUserName | Where {$_.UserName -match $env:UserName} | Stop-Process

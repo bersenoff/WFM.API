@@ -1,0 +1,1 @@
+Get-Process -Name firefox | Stop-Process -Force

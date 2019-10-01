@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "target": "es6",
+    "noImplicitAny": true,
+    "removeComments": false,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "outDir": "build",
+    "baseUrl": "src",
+    "paths": {
+      "@typeList/*": [
+        "./@types/*"
+      ],
+      "@classes": [
+        "Classes/index"
+      ],
+      "@utils": [
+        "Utils/index"
+      ]
+    },
+    "pretty": true
+  },
+  "include": [
+    "src/**/*"
+  ]
+}
