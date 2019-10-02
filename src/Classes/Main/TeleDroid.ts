@@ -16,7 +16,7 @@ class TeleDroid {
    */
   public async sendToLogs(message: string) {
     try {
-      var res = await axios({
+      const res = await axios({
         method: "POST",
         url: `${this.url}/messages/sendToLogs`,
         data: { message }
@@ -24,6 +24,21 @@ class TeleDroid {
 
       return res.data;
     } catch (err) { console.log(err.response.data.error); }
+  }
+
+  /**
+   * Отправка сообщения в общую группу
+   */
+  public async sendToGroup(message: string) {
+    try {
+      const res = await axios({
+        method: "POST",
+        url: `${this.url}/messages/sendToGroup`,
+        data: { message }
+      });
+
+      return res.data;
+    } catch (err) { console.log(err.message); }
   }
 
   /**
@@ -43,11 +58,11 @@ class TeleDroid {
     hashtags: string[]
   }) {
     try {
-      var res = await axios({
+      const res = await axios({
         method: "POST",
         url: `${this.url}/messages/sendToLogsNew`,
         data: {
-          service: process.env.SERVICE_NAME,
+          service: process.env.APP_NAME,
           place,
           date,
           time,
@@ -56,22 +71,56 @@ class TeleDroid {
         }
       });
       return res.data;
-    } catch (err) { console.log(err); }
+    } catch (err) {
+      if (typeof err.reponse !== "undefined") {
+        console.log(err.reponse.data);
+      } else {
+        console.log(err);
+      }
+    }
   }
 
   /**
-   * Отправка сообщения в общую группу
+   * Отправка ошибок
    */
-  public async sendToGroup(message: string) {
+  public async sendError({
+    place,
+    date,
+    time,
+    message,
+    hashtags,
+    actionUrl
+  }: {
+    place: string,
+    date: string,
+    time: string,
+    message: string,
+    hashtags: string[],
+    actionUrl?: string
+  }) {
     try {
       var res = await axios({
         method: "POST",
-        url: `${this.url}/messages/sendToGroup`,
-        data: { message }
+        url: `${this.url}/messages/sendError`,
+        data: {
+          service: process.env.APP_NAME,
+          place,
+          date,
+          time,
+          message,
+          hashtags,
+          actionUrl
+        }
       });
 
       return res.data;
-    } catch (err) { console.log(err.message); }
+    } catch (err) {
+      if (typeof err.reponse !== "undefined") {
+        console.log(err.reponse.data);
+      } else {
+        console.log(err);
+      }
+    }
   }
 }
 
