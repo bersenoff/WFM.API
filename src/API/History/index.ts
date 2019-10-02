@@ -104,6 +104,8 @@ export default class History extends Main {
         hashtags: ["history", "killExcel", "countAresData"]
       });
 
+      this.countUsersKPIs();
+
       return true;
     } catch (err) {
       let error = (typeof err === "string") ? err : err.message;
