@@ -30,4 +30,4 @@ class Server {
   }
 }
 
-new Server().start(Number(process.env.PORT));
+new Server().start(Number(process.env.APP_PORT));

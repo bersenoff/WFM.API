@@ -40,12 +40,18 @@ export default class System extends Main {
     } catch (err) {
       let error = (typeof err === "string") ? err : err.message;
 
-      await this.TeleDroid.sendToLogsNew({
+      const protocol = process.env.APP_PROTOCOL;
+      const host = process.env.APP_HOST;
+      const port = process.env.APP_PORT;
+      const actionUrl = `${protocol}://${host}:${port}/system/killExcel`;
+
+      await this.TeleDroid.sendError({
         place: "System.killExcel",
         date: moment().format("DD.MM.YYYY"),
         time: moment().format("HH:mm"),
         message: error,
-        hashtags: ["error", "killExcel", "history"]
+        hashtags: ["error", "killExcel", "history"],
+        actionUrl
       });
     }
 
