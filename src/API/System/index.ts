@@ -24,18 +24,17 @@ export default class System extends Main {
         date: moment().format("DD.MM.YYYY"),
         time: moment().format("HH:mm"),
         message: `Закрываю все Excel-процессы под учетной записью ${result[0].replace("\n", "")}...`,
-        hashtags: ["killExcel", "history"]
+        hashtags: ["killExcel"]
       });
 
       await cmd("powershell.exe", [`${process.env.APP_ROOT}/src/Scripts/killExcel.ps1`], { shell: true });
-
 
       await this.TeleDroid.sendToLogsNew({
         place: "System.killExcel",
         date: moment().format("DD.MM.YYYY"),
         time: moment().format("HH:mm"),
         message: `Все Excel-процессы успешно закрыты!`,
-        hashtags: ["killExcel", "history"]
+        hashtags: ["killExcel"]
       });
     } catch (err) {
       let error = (typeof err === "string") ? err : err.message;
@@ -43,15 +42,15 @@ export default class System extends Main {
       const protocol = process.env.APP_PROTOCOL;
       const host = process.env.APP_HOST;
       const port = process.env.APP_PORT;
-      const actionUrl = `${protocol}://${host}:${port}/system/killExcel`;
+      const restartUrl = `${protocol}://${host}:${port}/system/killExcel`;
 
       await this.TeleDroid.sendError({
         place: "System.killExcel",
         date: moment().format("DD.MM.YYYY"),
         time: moment().format("HH:mm"),
         message: error,
-        hashtags: ["error", "killExcel", "history"],
-        actionUrl
+        hashtags: ["error", "killExcel"],
+        restartUrl
       });
     }
 

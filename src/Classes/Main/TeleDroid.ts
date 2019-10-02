@@ -45,12 +45,14 @@ class TeleDroid {
    * Отправка сообщения в группу с логами в новом формате
    */
   public async sendToLogsNew({
+    processName,
     place,
     date,
     time,
     message,
     hashtags
   }: {
+    processName?: string,
     place: string,
     date: string,
     time: string,
@@ -62,6 +64,7 @@ class TeleDroid {
         method: "POST",
         url: `${this.url}/messages/sendToLogsNew`,
         data: {
+          process: processName,
           service: process.env.APP_NAME,
           place,
           date,
@@ -84,32 +87,38 @@ class TeleDroid {
    * Отправка ошибок
    */
   public async sendError({
+    processName,
     place,
     date,
     time,
     message,
     hashtags,
-    actionUrl
+    restartUrl,
+    nextUrl
   }: {
+    processName?: string,
     place: string,
     date: string,
     time: string,
     message: string,
     hashtags: string[],
-    actionUrl?: string
+    restartUrl?: string,
+    nextUrl?: string
   }) {
     try {
       var res = await axios({
         method: "POST",
         url: `${this.url}/messages/sendError`,
         data: {
+          process: processName,
           service: process.env.APP_NAME,
           place,
           date,
           time,
           message,
           hashtags,
-          actionUrl
+          restartUrl,
+          nextUrl
         }
       });
 
