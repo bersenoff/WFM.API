@@ -54,6 +54,8 @@ export default class History extends Main {
 
       await cmd("cscript X:\\WFM-Reports\\Day\\HistoryP_new\\02-RefreshHistoryDB.vbs", [], { shell: true });
 
+      this.refreshRoles();
+
       return true;
     } catch (err) {
       let error = (typeof err === "string") ? err : err.message;
@@ -92,6 +94,8 @@ export default class History extends Main {
       });
 
       await cmd("cscript X:\\WFM-Reports\\Day\\HistoryP_new\\03-RefreshRoles.vbs", [], { shell: true });
+
+      this.copyDataToMainReport();
 
       return true;
     } catch (err) {
@@ -132,6 +136,8 @@ export default class History extends Main {
 
       await cmd("cscript X:\\WFM-Reports\\Day\\HistoryP_new\\05-CopyDataToMainReport.vbs", [], { shell: true });
 
+      this.consultingData();
+
       return true;
     } catch (err) {
       let error = (typeof err === "string") ? err : err.message;
@@ -170,6 +176,8 @@ export default class History extends Main {
       });
 
       await cmd("cscript X:\\WFM-Reports\\Day\\HistoryP_new\\06-ConsultingData.vbs", [], { shell: true });
+
+      this.copyToInternalReportCC();
 
       return true;
     } catch (err) {
@@ -210,6 +218,8 @@ export default class History extends Main {
 
       await cmd("cscript X:\\WFM-Reports\\Day\\HistoryP_new\\07-CopyToInternalReportCC.vbs", [], { shell: true });
 
+      this.copyToArchiv();
+
       return true;
     } catch (err) {
       let error = (typeof err === "string") ? err : err.message;
@@ -248,6 +258,8 @@ export default class History extends Main {
       });
 
       await cmd("cscript X:\\WFM-Reports\\Day\\HistoryP_new\\08-CopyToArchiv.vbs", [], { shell: true });
+
+      this.countSeniorPivot();
 
       return true;
     } catch (err) {
@@ -288,6 +300,8 @@ export default class History extends Main {
 
       await cmd("cscript X:\\WFM-Reports\\Day\\HistoryP_new\\09-CountSeniorPivot.vbs", [], { shell: true });
 
+      this.makeGroupList();
+
       return true;
     } catch (err) {
       let error = (typeof err === "string") ? err : err.message;
@@ -326,6 +340,15 @@ export default class History extends Main {
       });
 
       await cmd("cscript X:\\WFM-Reports\\Day\\HistoryP_new\\11-MakeGroupList.vbs", [], { shell: true });
+
+      await this.TeleDroid.sendToLogsNew({
+        processName: "Обновление History",
+        place: "History.makeGroupList()",
+        date: moment().format("DD.MM.YYYY"),
+        time: moment().format("HH:mm"),
+        message: `Обновление History завершено!`,
+        hashtags: ["history", "makeGroupList", "historyComplete"]
+      });
 
       return true;
     } catch (err) {

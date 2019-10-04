@@ -8,6 +8,7 @@ const countUsersKPIs = getRouter("/history/countUsersKPIs", async () => await Hi
 const refreshHistoryDB = getRouter("/history/refreshHistoryDB", async () => await History.refreshHistoryDB());
 const refreshRoles = getRouter("/history/refreshRoles", async () => await History.refreshRoles());
 const copyDataToMainReport = getRouter("/history/copyDataToMainReport", async () => await History.copyDataToMainReport());
+const consultingData = getRouter("/history/consultingData", async () => await History.consultingData());
 const copyToInternalReportCC = getRouter("/history/copyToInternalReportCC", async () => await History.copyToInternalReportCC());
 const copyToArchiv = getRouter("/history/copyToArchiv", async () => await History.copyToArchiv());
 const countSeniorPivot = getRouter("/history/countSeniorPivot", async () => await History.countSeniorPivot());
@@ -21,6 +22,7 @@ export default [
   refreshHistoryDB,
   refreshRoles,
   copyDataToMainReport,
+  consultingData,
   copyToInternalReportCC,
   copyToArchiv,
   countSeniorPivot,
