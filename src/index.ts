@@ -6,6 +6,8 @@ import helmet from "helmet";
 import bodyParser from "body-parser";
 import cors from "cors";
 import routes from "./Routes";
+import { CronJob } from "cron";
+import { History } from "./API";
 
 class Server {
   app: Application;
@@ -27,6 +29,14 @@ class Server {
   public start: (port: number) => void = (port) => {
     this.app.listen(port);
     console.log(`Сервер запущен на ${port} порту...`);
+
+    new CronJob("0 0 3 * * *", () => {
+      History.update();
+    }, null, true, "Europe/Moscow")
+
+    new CronJob("0 30 7 * * *", () => {
+      History.update();
+    }, null, true, "Europe/Moscow")
   }
 }
 
