@@ -341,6 +341,15 @@ export default class History extends Main {
 
       await cmd("cscript X:\\WFM-Reports\\Day\\HistoryP_new\\11-MakeGroupList.vbs", [], { shell: true });
 
+      await this.TeleDroid.sendToLogsNew({
+        processName: "Обновление History",
+        place: "History.makeGroupList()",
+        date: moment().format("DD.MM.YYYY"),
+        time: moment().format("HH:mm"),
+        message: `Обновление History завершено!`,
+        hashtags: ["history", "makeGroupList", "historyComplete"]
+      });
+
       return true;
     } catch (err) {
       let error = (typeof err === "string") ? err : err.message;
