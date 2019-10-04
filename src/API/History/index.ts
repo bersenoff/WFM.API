@@ -72,7 +72,7 @@ export default class History extends Main {
         date: moment().format("DD.MM.YYYY"),
         time: moment().format("HH:mm"),
         message: error,
-        hashtags: ["error", "Обновление History", "refreshHistoryDB"],
+        hashtags: ["error", "history", "refreshHistoryDB"],
         restartUrl,
         nextUrl
       });
