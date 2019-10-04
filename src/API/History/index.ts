@@ -814,6 +814,8 @@ export default class History extends Main {
       other()
     ]);
 
+    this.refreshHistoryDB();
+
     return true;
   }
 }
