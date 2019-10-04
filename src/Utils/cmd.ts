@@ -6,9 +6,7 @@ export default (command: string, args: string[], options: any) => {
     const output: string[] = [];
 
     process.stdout.on("data", (data: any) => {
-      data = data.toString();
-      output.push(data);
-      resolve(data);
+      console.log(data.toString());
     });
 
     process.stderr.on("data", (data: any) => {
@@ -18,10 +16,10 @@ export default (command: string, args: string[], options: any) => {
     process.on("close", (data: any) => {
       if (Number(data.toString()) !== 0) {
         // При выполнении скрипта произошла ошибка
-        reject(`Процесс завершен с кодом: ${data.toString()}`);
+        reject(`Что-то пошло не так, скрипт завершился с кодом ${data.toString()}...`);
       } else {
         // Скрипт успешно выполнен
-        resolve(output);
+        resolve(true);
       }
     });
   });
