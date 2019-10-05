@@ -171,11 +171,11 @@ export default class History extends Main {
         place: "History.consultingData()",
         date: moment().format("DD.MM.YYYY"),
         time: moment().format("HH:mm"),
-        message: `Запускается скрипт 06-ConsultingData.vbs...`,
+        message: `Запускается скрипт 06-ConsultingData_tes.vbs...`,
         hashtags: ["history", "consultingData"]
       });
 
-      await cmd("cscript X:\\WFM-Reports\\Day\\HistoryP_new\\06-ConsultingData.vbs", [], { shell: true });
+      await cmd("cscript X:\\WFM-Reports\\Day\\HistoryP_new\\06-ConsultingData_tes.vbs", [], { shell: true });
 
       this.copyToInternalReportCC();
 
