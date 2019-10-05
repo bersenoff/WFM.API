@@ -10,6 +10,7 @@ export default (command: string, args: string[], options: any) => {
     });
 
     process.stderr.on("data", (data: any) => {
+      console.log(data.toString());
       reject(data.toString());
     });
 
