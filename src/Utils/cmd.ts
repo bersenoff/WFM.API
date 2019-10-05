@@ -5,6 +5,8 @@ export default (command: string, args: string[], options: any) => {
     const process: any = spawn(command, args, options);
     const output: string[] = [];
 
+    console.log(`cmd: ${command}`);
+
     process.stdout.on("data", (data: any) => {
       console.log(data.toString());
     });
