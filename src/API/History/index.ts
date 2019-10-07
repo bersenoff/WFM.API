@@ -482,7 +482,6 @@ export default class History extends Main {
    * Рассчет всех таблиц
    */
   public countUsersKPIs: TFnCountUsersKPIs = async () => {
-
     try {
       await this.TeleDroid.sendToLogsNew({
         processName: "Обновление History",
