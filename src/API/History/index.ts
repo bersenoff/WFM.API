@@ -633,10 +633,10 @@ export default class History extends Main {
       Promise.all([
         replaceDataBetweenTables(this.db, "reportdb.vuusercuvovip", "reportdb.uusercuvovip", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuusercuvo611", "reportdb.uusercuvo611", "Обновление History"),
-        replaceDataBetweenTables(this.db, "reportdb.vuusercuvo636", "uusercuvo636", "Обновление History"),
-        replaceDataBetweenTables(this.db, "reportdb.vuusercuvocdma", "uusercuvocdma", "Обновление History"),
-        replaceDataBetweenTables(this.db, "reportdb.vuusercuvo687q1wotech", "uusercuvo687q1wotech", "Обновление History"),
-        replaceDataBetweenTables(this.db, "reportdb.vuusercuvo687q2", "uusercuvo687q2", "Обновление History"),
+        replaceDataBetweenTables(this.db, "reportdb.vuusercuvo636", "reportdb.uusercuvo636", "Обновление History"),
+        replaceDataBetweenTables(this.db, "reportdb.vuusercuvocdma", "reportdb.uusercuvocdma", "Обновление History"),
+        replaceDataBetweenTables(this.db, "reportdb.vuusercuvo687q1wotech", "reportdb.uusercuvo687q1wotech", "Обновление History"),
+        replaceDataBetweenTables(this.db, "reportdb.vuusercuvo687q2", "reportdb.uusercuvo687q2", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuusercuvomail", "reportdb.uusercuvomail", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuusercuvoonline", "reportdb.uusercuvoonline", "Обновление History")
       ]);
