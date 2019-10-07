@@ -24,12 +24,15 @@ export default async (db: Sequelize, srcTable: string, trgTable: string, process
       SELECT * FROM ${srcTable}
     `);
   } catch (err) {
+    let message: string = `${srcTable} -> ${trgTable}\n\n`;
+    message += err.message;
+
     TeleDroid.sendError({
       processName: process,
       place: "replaceDataBetweenTables",
       date: moment().format("DD.MM.YYYY"),
       time: moment().format("HH:mm"),
-      message: err.message,
+      message: message,
       hashtags: ["replaceDataBetweenTables"]
     });
   }
