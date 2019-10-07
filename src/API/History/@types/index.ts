@@ -5,6 +5,7 @@ export type TFnCountUsersKPIs = () => Promise<boolean>;
 export type TFnCountFirstLevel = () => Promise<boolean>;
 export type TFnCountSecondLevel = () => Promise<boolean>;
 export type TFnCountThirdLevel = () => Promise<boolean>;
+export type TFnCountFourthLevel = () => Promise<boolean>;
 export type TFnRefreshHistoryDB = () => Promise<boolean>;
 export type TFnRefreshRoles = () => Promise<boolean>;
 export type TFnCopyDataToMainReport = () => Promise<boolean>;

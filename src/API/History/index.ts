@@ -11,6 +11,7 @@ import {
   TFnCountFirstLevel,
   TFnCountSecondLevel,
   TFnCountThirdLevel,
+  TFnCountFourthLevel,
   TFnRefreshHistoryDB,
   TFnRefreshRoles,
   TFnCopyDataToMainReport,
@@ -495,6 +496,7 @@ export default class History extends Main {
       await this.countFirstLevel();
       await this.countSecondLevel();
       await this.countThirdLevel();
+      await this.countFourthLevel();
 
       await this.TeleDroid.sendToLogsNew({
         processName: "Обновление History",
@@ -734,6 +736,7 @@ export default class History extends Main {
       dp(),
       accidents(),
       schedule(),
+      upsales(),
       other()
     ]);
 
@@ -813,6 +816,144 @@ export default class History extends Main {
       schedule(),
       other()
     ]);
+
+    return true;
+  }
+
+  /**
+   * Таблицы 4 уровня
+   */
+  public countFourthLevel: TFnCountFourthLevel = async () => {
+    await Promise.all([
+      replaceDataBetweenTables(this.db, "reportdb.vdate_adherence", "reportdb.date_adherence", "Обновление History"),
+      replaceDataBetweenTables(this.db, "reportdb.vdate_conn24", "reportdb.date_conn24", "Обновление History"),
+      replaceDataBetweenTables(this.db, "reportdb.vdate_eff", "reportdb.date_eff", "Обновление History"),
+      replaceDataBetweenTables(this.db, "reportdb.vdate_conn24tm", "reportdb.date_conn24tm", "Обновление History"),
+      replaceDataBetweenTables(this.db, "reportdb.vdate_paycount", "reportdb.date_paycount", "Обновление History"),
+      replaceDataBetweenTables(this.db, "reportdb.vdate_repeatnotesnew", "reportdb.date_repeatnotesnew", "Обновление History"),
+      replaceDataBetweenTables(this.db, "reportdb.vuseroutofdecret", "reportdb.useroutofdecret", "Обновление History")
+    ]);
+
+    await this.TeleDroid.sendToLogsNew({
+      processName: "Обновление History",
+      place: "History.countFourthLevel()",
+      date: moment().format("DD.MM.YYYY"),
+      time: moment().format("HH:mm"),
+      message: `Обновление таблицы uuser_tail...`,
+      hashtags: ["history", "countFourthLevel"]
+    });
+
+    await this.db.query(`TRUNCATE TABLE reportdb.uuser_tail`);
+
+    await this.db.query(`
+      INSERT IGNORE INTO reportdb.uuser_tail (date, iduser)
+      SELECT date, iduser FROM reportdb.userlistdaystruct
+    `);
+
+    await this.db.query(`
+      UPDATE reportdb.uuser_tail t1
+      LEFT JOIN reportdb.userlistdaystructfullname t2 ON t1.date = t2.date
+        AND t1.iduser = t2.iduser
+      LEFT JOIN reportdb.uuseradherence t3 ON t1.iduser = t3.iduser
+        AND t1.date = t3.date 
+      SET 
+        t1.adherence = t3.adherence,
+        t1.adherence_count = IF(ISNULL(t3.adherence), NULL, 1),
+        t1.actualCTI = t3.actualCTI,
+        t1.forecastCTI = t3.forecastCTI
+      WHERE t2.position NOT IN ('Ведущий специалист группы абонентского обслуживания' , 'Ведущий специалист группы по настройке клиентского оборудования',
+          'Ведущий специалист группы экспертной поддержки',
+          'Эксперт по обслуживанию электронных обращений',
+          'Старший специалист группы абонентского обслуживания',
+          'Старший специалист группы по настройке клиентского оборудования',
+          'Старший эксперт по обслуживанию корпоративных клиентов и VIP клиентов',
+          'Старший эксперт по работе с ключевыми клиентами',
+          'Руководитель направления экспертной поддержки ключевых клиентов',
+          'Ведущий специалист языковой линии',
+          'Руководитель группы абонентского обслуживания',
+          'Руководитель группы по обслуживанию корпоративных и VIP клиентов',
+          'Ведущий специалист',
+          'Старший специалист')
+    `);
+
+    await this.db.query(`
+      UPDATE reportdb.uuser_tail t1
+      LEFT JOIN reportdb.userlistdaystructfullname t0 ON t1.iduser = t0.iduser
+        AND t1.date = t0.date
+      LEFT JOIN reportdb.uuseracd t2 ON t1.iduser = t2.iduser
+        AND t1.date = t2.date
+      LEFT JOIN reportdb.date_eff t4 ON t1.date = t4.date
+      LEFT JOIN reportdb.date_conn24 t5 ON t1.date = t5.date
+      LEFT JOIN reportdb.date_paycount t6 ON t1.date = t6.date
+      LEFT JOIN reportdb.date_repeatnotesnew t7 ON t1.date = t7.date
+      LEFT JOIN reportdb.date_adherence t12 ON t1.date = t12.date
+      LEFT JOIN reportdb.uurepeatnotesnew t8 ON t1.date = t8.date
+        AND t1.iduser = t8.iduser
+      LEFT JOIN reportdb.date_conn24tm t9 ON t1.date = t9.date
+      LEFT JOIN reportdb.uusercontactstm_xmt t10 ON t1.date = t10.date
+        AND t1.iduser = t10.iduser
+      LEFT JOIN reportdb.mplist_exceptions t11 ON t1.date >= t11.bdate
+        AND t1.date <= t11.edate
+        AND t1.iduser = t11.iduser
+      LEFT JOIN reportdb.uusermails t13 ON t1.date = t13.date
+        AND t1.iduser = t13.iduser
+      LEFT JOIN reportdb.uuserchats t14 ON t1.date = t14.date
+        AND t1.iduser = t14.iduser
+      LEFT JOIN reportdb.useroutofdecret t15 ON t1.iduser = t15.iduser
+        AND t1.date >= t15.bdate
+        AND TIMESTAMPDIFF(MONTH, t15.bdate, t1.date) = 0
+      LEFT JOIN reportdb.uusertmexception t16 ON t1.iduser = t16.iduser
+        AND t1.date >= t16.bdate
+        AND t1.date <= t16.edate 
+      SET 
+        t1.account = IF(t0.employer IN ('Tele2' , 'Анкор')
+          AND (t0.groupreport NOT LIKE '%Обучение')
+          AND t16.iduser IS NULL, 1, 0),
+        t1.account_mplist = IF((t0.employer IN ('Tele2' , 'Анкор')
+          AND (t0.groupreport NOT LIKE '%Обучение')
+          AND t11.iduser IS NULL
+          AND t16.iduser IS NULL), 1, 0),
+        t1.account_group = IF((t0.employer IN ('Tele2' , 'Анкор'))
+          AND (t0.groupreport NOT LIKE '%Обучение')
+          AND t15.iduser IS NULL
+          AND t16.iduser IS NULL, 1, 0),
+        t1.acd611_eff = IF(t4.eff > 0,
+        t2.acd611 - IF(t0.groupchurn LIKE '%Операционное управление%'
+              AND t1.date BETWEEN '2017-10-01' AND '2017-10-31',
+              t2.acd611, 0), NULL),
+        t1.acd636_eff = IF(t4.eff > 0, t2.acd636, NULL),
+        t1.date_eff = IF(t4.eff > 0, t1.date, NULL),
+        t1.mp_eff = IF(t4.eff > 0, t0.month, NULL),
+        t1.acd611_conn24 = IF(t5.conn24 > 0,
+        t2.acd611 - IF(t0.groupchurn LIKE '%Операционное управление%'
+              AND t1.date BETWEEN '2017-10-01' AND '2017-10-31',
+              t2.acd611, 0), NULL),
+        t1.acd636_conn24 = IF(t5.conn24 > 0, t2.acd636, NULL),
+        t1.date_conn24 = IF(t5.conn24 > 0, t1.date, NULL),
+        t1.mp_conn24 = IF(t5.conn24 > 0, t0.month, NULL),
+        t1.acd611_payment = IF(t6.paycount > 0, t2.acd611, NULL),
+        t1.date_payment = IF(t6.paycount > 0, t1.date, NULL),
+        t1.mp_payment = IF(t6.paycount > 0, t0.month, NULL),
+        t1.acd611_repeatnotesnew = IF(t7.repeatnotesnew > 0,
+              t2.acd4repeat611, NULL),
+        t1.repeatnotesnew611_repeatnotesnew = IF((t1.date < (CURDATE() - INTERVAL 8 DAY)),
+              t8.repeatnotesnew611, 0),
+        t1.mp_payment = IF(t6.paycount > 0, t0.month, NULL),
+        t1.acd636_repeatnotesnew = IF(t7.repeatnotesnew > 0,
+              t2.acd636, NULL),
+        t1.repeatnotesnew636_repeatnotesnew = IF((t1.date < (CURDATE() - INTERVAL 8 DAY)),
+              t8.repeatnotesnew636, 0),
+        t1.date_repeatnotesnew = IF(t7.repeatnotesnew > 0, t1.date, NULL),
+        t1.mp_repeatnotesnew = IF(t7.repeatnotesnew > 0,
+              t0.month, NULL),
+        t1.date_conn24tm = IF(t9.conn24tm > 0, t1.date, NULL),
+        t1.mp_conn24tm = IF(t9.conn24tm > 0, t0.month, NULL),
+        t1.contactssuccessful_conn24tm = IF(t9.conn24tm > 0,
+              t10.contactssuccesful, NULL),
+        t1.contacts_conn24tm = IF(t9.conn24tm > 0, t10.contacts, NULL),
+        t1.onlineactivities = IF(1,
+              IFNULL(t14.answeredchats, 0) + IFNULL(t14.answeredmessengers, 0) + IFNULL(t13.answeredmails, 0), NULL)
+    `);
 
     this.refreshHistoryDB();
 
