@@ -7,7 +7,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import routes from "./Routes";
 import { CronJob } from "cron";
-import { History } from "./API";
+import { History, Tasks } from "./API";
 
 class Server {
   app: Application;
@@ -30,13 +30,23 @@ class Server {
     this.app.listen(port);
     console.log(`Сервер запущен на ${port} порту...`);
 
+    new CronJob("0 30 0 * * *", () => {
+      Tasks.updateRegionsStruct();
+      Tasks.refreshReports();
+    }, null, true, "Europe/Moscow");
+
     new CronJob("0 0 3 * * *", () => {
       History.update();
-    }, null, true, "Europe/Moscow")
+    }, null, true, "Europe/Moscow");
 
     new CronJob("0 30 7 * * *", () => {
       History.update();
-    }, null, true, "Europe/Moscow")
+    }, null, true, "Europe/Moscow");
+
+    new CronJob("0 30 15 * * *", () => {
+      History.update();
+      Tasks.updateUsersStruct();
+    }, null, true, "Europe/Moscow");
   }
 }
 
