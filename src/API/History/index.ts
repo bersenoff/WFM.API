@@ -602,6 +602,7 @@ export default class History extends Main {
     await Promise.all([
       structure(),
       acd(),
+      cuvo(),
       crit(),
       webtutor(),
       upsales(),
