@@ -25,6 +25,7 @@ import { cmd, replaceDataBetweenTables, getRowsCount } from "@utils";
 import { refreshDateIdUserOnError } from "./lib";
 import moment from "moment";
 import axios from "axios";
+import { resolve } from "bluebird";
 
 export default class History extends Main {
   constructor() {
@@ -549,43 +550,50 @@ export default class History extends Main {
       await replaceDataBetweenTables(this.db, "reportdb.vuuseracdprep", "reportdb.uuseracdprep", "Обновление History");
     }
 
-    const cuvo = () => {
-      Promise.all([
+    const cuvo = new Promise(async (resolve) => {
+      await Promise.all([
         replaceDataBetweenTables(this.db, "reportdb.vuusercuvoline", "reportdb.uusercuvoline", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuusercuvomailprep", "reportdb.uusercuvomailprep", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuusercuvoonlineprep", "reportdb.uusercuvoonlineprep", "Обновление History")
       ]);
-    }
 
-    const crit = () => {
-      Promise.all([
+      resolve(true);
+    });
+
+    const crit = new Promise(async (resolve) => {
+      await Promise.all([
         replaceDataBetweenTables(this.db, "reportdb.vuusercriterroncallsline", "reportdb.uusercriterroncallsline", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuusercriterroncallsline_ccb", "reportdb.uusercriterroncallsline_ccb", "Обновление History")
       ]);
-    }
 
-    const webtutor = () => {
-      Promise.all([
+      resolve(true);
+    });
+
+    const webtutor = new Promise(async (resolve) => {
+      await Promise.all([
         replaceDataBetweenTables(this.db, "reportdb.vuuserwebtutor_detail", "reportdb.uuserwebtutor_detail", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuuserwebtutor_detail_mentors", "reportdb.uuserwebtutor_detail_mentors", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuuseracdline_exc_yar_ivan", "reportdb.uuseracdline_exc_yar_ivan", "Обновление History")
       ]);
-    }
 
-    const upsales = () => {
-      Promise.all([
+      resolve(true);
+    });
+
+    const upsales = new Promise(async (resolve) => {
+      await Promise.all([
         replaceDataBetweenTables(this.db, "reportdb.vuuupsalesvolumeprep", "reportdb.uuupsalesvolumeprep", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuucbmoffersvolumeprep", "reportdb.uucbmoffersvolumeprep", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuucbmoffersvolumeprep_crm", "reportdb.uucbmoffersvolumeprep_crm", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuucbmoffersvolumeprep_conn", "reportdb.uucbmoffersvolumeprep_conn", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuucbmoffersvolumeprep_conn_crm", "reportdb.uucbmoffersvolumeprep_conn_crm", "Обновление History"),
-        replaceDataBetweenTables(this.db, "reportdb.vuucbmoffersvolumeprep_conn_crm_msk", "reportdb.uucbmoffersvolumeprep_conn_crm_msk", "Обновление History"),
+        replaceDataBetweenTables(this.db, "reportdb.vuucbmoffersvolumeprep_conn_crm_msk", "reportdb.uucbmoffersvolumeprep_conn_crm_msk", "Обновление History")
       ]);
-    }
 
-    // Разное
-    const other = () => {
-      Promise.all([
+      resolve(true);
+    });
+
+    const other = new Promise(async (resolve) => {
+      await Promise.all([
         replaceDataBetweenTables(this.db, "reportdb.vuusubgroup", "reportdb.uusubgroup", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuserteleoptiagentinfo", "reportdb.userteleoptiagentinfo", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuuseraccidentsprep", "reportdb.uuseraccidentsprep", "Обновление History"),
@@ -597,16 +605,18 @@ export default class History extends Main {
         replaceDataBetweenTables(this.db, "reportdb.vuusertmexception", "reportdb.uusertmexception", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuuseraccidentsprepwotechccb", "reportdb.uuseraccidentsprepwotechccb", "Обновление History")
       ]);
-    }
+
+      resolve(true);
+    });
 
     await Promise.all([
       structure(),
       acd(),
-      cuvo(),
-      crit(),
-      webtutor(),
-      upsales(),
-      other()
+      cuvo,
+      crit,
+      webtutor,
+      upsales,
+      other
     ]);
 
     return true;
@@ -616,22 +626,23 @@ export default class History extends Main {
    * Таблицы 2 уровня
    */
   public countSecondLevel: TFnCountSecondLevel = async () => {
-    // ACD
-    const acd = async () => {
+    const acd = new Promise(async (resolve) => {
       await Promise.all([
         replaceDataBetweenTables(this.db, "reportdb.vuuseracd", "reportdb.uuseracd", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuuseracdallabonprep", "reportdb.uuseracdallabonprep", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuuseracdtm", "reportdb.uuseracdtm", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuuseracdahttm", "reportdb.uuseracdahttm", "Обновление History"),
-        replaceDataBetweenTables(this.db, "reportdb.vuusercontactstm", "reportdb.uusercontactstm", "Обновление History")
+        replaceDataBetweenTables(this.db, "reportdb.vuusercontactstm", "reportdb.uusercontactstm", "Обновление History"),
+        replaceDataBetweenTables(this.db, "reportdb.vuuseracdprep_exc_yar_ivan", "reportdb.uuseracdprep_exc_yar_ivan", "Обновление History")
       ]);
 
       await replaceDataBetweenTables(this.db, "reportdb.vuuseracdallabon", "reportdb.uuseracdallabon", "Обновление History");
-    }
 
-    // CuVo
-    const cuvo = () => {
-      Promise.all([
+      resolve(true);
+    });
+
+    const cuvo = new Promise(async (resolve) => {
+      await Promise.all([
         replaceDataBetweenTables(this.db, "reportdb.vuusercuvovip", "reportdb.uusercuvovip", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuusercuvo611", "reportdb.uusercuvo611", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuusercuvo636", "reportdb.uusercuvo636", "Обновление History"),
@@ -641,10 +652,11 @@ export default class History extends Main {
         replaceDataBetweenTables(this.db, "reportdb.vuusercuvomail", "reportdb.uusercuvomail", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuusercuvoonline", "reportdb.uusercuvoonline", "Обновление History")
       ]);
-    }
 
-    // Криты
-    const crit = async () => {
+      resolve(true);
+    });
+
+    const crit = new Promise(async (resolve) => {
       await replaceDataBetweenTables(this.db, "reportdb.vuusercriterroncallsoperprep", "reportdb.uusercriterroncallsoperprep", "Обновление History");
 
       await Promise.all([
@@ -655,26 +667,30 @@ export default class History extends Main {
         replaceDataBetweenTables(this.db, "reportdb.vuusercritgplay", "reportdb.uusercritgplay", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuusercritmail", "reportdb.uusercritmail", "Обновление History")
       ]);
-    }
 
-    // Соблюдение
-    const adherence = () => {
-      Promise.all([
+      resolve(true);
+    });
+
+    const adherence = new Promise(async (resolve) => {
+      await Promise.all([
         replaceDataBetweenTables(this.db, "reportdb.vuuseradherencedetail", "reportdb.uuseradherencedetail", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuuserabsenceprep", "reportdb.uuserabsenceprep", "Обновление History")
       ]);
-    }
 
-    // ДП
-    const dp = () => {
-      Promise.all([
+      resolve(true);
+    });
+
+    const dp = new Promise(async (resolve) => {
+      await Promise.all([
         replaceDataBetweenTables(this.db, "reportdb.vuuserconn24tm_teststr", "reportdb.uuserconn24tm_teststr", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuuserconn24preptm", "reportdb.uuserconn24preptm", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vservidlistdatavas_numumbupsale", "reportdb.servidlistdatavas_numumbupsale", "Обновление History")
       ]);
-    }
 
-    const accidents = async () => {
+      resolve(true);
+    });
+
+    const accidents = new Promise(async (resolve) => {
       const rowsCount: number = await getRowsCount(this.db, "reportdb.uuseraccidentsprep");
 
       if (rowsCount > 0) {
@@ -688,11 +704,12 @@ export default class History extends Main {
           refreshDateIdUserOnError("reportdb.uuseraccidentsmass")
         ]);
       }
-    }
 
-    // Расписание
-    const schedule = () => {
-      Promise.all([
+      resolve(true);
+    });
+
+    const schedule = new Promise(async (resolve) => {
+      await Promise.all([
         replaceDataBetweenTables(this.db, "reportdb.vrtmschedule_workday", "reportdb.rtmschedule_workday", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vrtmscheduleday611", "reportdb.rtmscheduleday611", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vrtmscheduleday614", "reportdb.rtmscheduleday614", "Обновление History"),
@@ -702,19 +719,22 @@ export default class History extends Main {
         replaceDataBetweenTables(this.db, "reportdb.vrtmtraff_day", "reportdb.rtmtraff_day", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vrtmtraff_day_nocc", "reportdb.rtmtraff_day_nocc", "Обновление History")
       ]);
-    }
 
-    const upsales = () => {
-      Promise.all([
+      resolve(true);
+    });
+
+    const upsales = new Promise(async (resolve) => {
+      await Promise.all([
         replaceDataBetweenTables(this.db, "reportdb.vuuupsalesvolume", "reportdb.uuupsalesvolume", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuuupsalesvolume_conn", "reportdb.uupsalesvolume_conn", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuuupsalesvolume_conn_msk", "reportdb.uupsalesvolume_conn_msk", "Обновление History")
       ]);
-    }
 
-    // Разное
-    const other = () => {
-      Promise.all([
+      resolve(true);
+    });
+
+    const other = new Promise(async (resolve) => {
+      await Promise.all([
         replaceDataBetweenTables(this.db, "reportdb.vuusertminterviews", "reportdb.uusertminterviews", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuuserstafftime", "reportdb.uuserstafftime", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuusermnpout", "reportdb.uusermnpout", "Обновление History"),
@@ -726,18 +746,20 @@ export default class History extends Main {
         replaceDataBetweenTables(this.db, "reportdb.vuserroles", "reportdb.userroles", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuserroles_prep", "reportdb.userroles_prep", "Обновление History")
       ]);
-    }
+
+      resolve(true);
+    });
 
     await Promise.all([
-      acd(),
-      cuvo(),
-      crit(),
-      adherence(),
-      dp(),
-      accidents(),
-      schedule(),
-      upsales(),
-      other()
+      acd,
+      cuvo,
+      crit,
+      adherence,
+      dp,
+      accidents,
+      schedule,
+      upsales,
+      other
     ]);
 
     return true;
@@ -747,8 +769,7 @@ export default class History extends Main {
    * Таблицы 3 уровня
    */
   public countThirdLevel: TFnCountThirdLevel = async () => {
-    // Криты
-    const crit = async () => {
+    const crit = new Promise(async (resolve) => {
       await Promise.all([
         replaceDataBetweenTables(this.db, "reportdb.vuusercriterroncallstm", "reportdb.uusercriterroncallstm", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuusercritintarget", "reportdb.uusercritintarget", "Обновление History"),
@@ -756,18 +777,20 @@ export default class History extends Main {
       ]);
 
       await replaceDataBetweenTables(this.db, "reportdb.vuuserevalsintarget", "reportdb.uuserevalsintarget", "Обновление History");
-    }
 
-    // Соблюдение
-    const adherence = () => {
-      Promise.all([
+      resolve(true);
+    });
+
+    const adherence = new Promise(async (resolve) => {
+      await Promise.all([
         replaceDataBetweenTables(this.db, "reportdb.vuuseradherence", "reportdb.uuseradherence", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuuserabsence", "reportdb.uuserabsence", "Обновление History")
       ]);
-    }
 
-    // ДП
-    const dp = async () => {
+      resolve(true);
+    });
+
+    const dp = new Promise(async (resolve) => {
       await Promise.all([
         replaceDataBetweenTables(this.db, "reportdb.vuuserconn24preptmstr", "reportdb.uuserconn24preptmstr", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuusereff", "reportdb.uusereff", "Обновление History"),
@@ -781,10 +804,11 @@ export default class History extends Main {
       } else {
         await refreshDateIdUserOnError("uuserconn24tm");
       }
-    }
 
-    // Расписание
-    const schedule = async () => {
+      resolve(true);
+    });
+
+    const schedule = new Promise(async (resolve) => {
       await Promise.all([
         replaceDataBetweenTables(this.db, "reportdb.vrtmschedule_traff_day", "reportdb.rtmschedule_traff_day", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vrtmschedule_traff_day_nocc", "reportdb.rtmschedule_traff_day_nocc", "Обновление History"),
@@ -792,11 +816,12 @@ export default class History extends Main {
       ]);
 
       await replaceDataBetweenTables(this.db, "reportdb.vrtmschedule_traff_day_struct", "reportdb.rtmschedule_traff_day_struct", "Обновление History");
-    }
 
-    // Разное
-    const other = () => {
-      Promise.all([
+      resolve(true);
+    });
+
+    const other = new Promise(async (resolve) => {
+      await Promise.all([
         replaceDataBetweenTables(this.db, "reportdb.vuusermails", "reportdb.uusermails", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuuserchats", "reportdb.uuserchats", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuuserwebtutor", "reportdb.uuserwebtutor", "Обновление History"),
@@ -807,14 +832,16 @@ export default class History extends Main {
         replaceDataBetweenTables(this.db, "reportdb.vdataevalonlinechannels_report_all", "reportdb.dataevalonlinechannels_report_all", "Обновление History"),
         replaceDataBetweenTables(this.db, "reportdb.vuuseraccidentswotechccb", "reportdb.uuseraccidentswotechccb", "Обновление History")
       ]);
-    }
+
+      resolve(true);
+    });
 
     await Promise.all([
-      crit(),
-      adherence(),
-      dp(),
-      schedule(),
-      other()
+      crit,
+      adherence,
+      dp,
+      schedule,
+      other
     ]);
 
     return true;
