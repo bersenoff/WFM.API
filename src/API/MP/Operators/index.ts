@@ -8,6 +8,7 @@ import {
   TFnCollectDataFiles
 } from "./@types";
 import moment from "moment";
+import axios from "axios";
 import { cmd } from "@utils";
 
 export default class Operators extends Main {
@@ -16,6 +17,15 @@ export default class Operators extends Main {
   }
 
   public update: TFnUpdate = async () => {
+    await this.TeleDroid.sendToLogsNew({
+      processName: "Обновление операторской МП",
+      place: "History.update()",
+      date: moment().format("DD.MM.YYYY"),
+      time: moment().format("HH:mm"),
+      message: "Начинается обновление файлов операторской МП...",
+      hashtags: ["mp", "operators", "update"]
+    });
+
     this.collectDataFiles();
     return true;
   }
@@ -182,6 +192,23 @@ export default class Operators extends Main {
       });
 
       await cmd("cscript X:\\WFM-Reports\\Day\\Motivation\\OperMotivation\\07-CopyNewToARES.vbs", [], { shell: true });
+
+      axios({
+        method: "POST",
+        url: "http://ares:7000/tasks/loadOperatorsMP",
+        data: {
+          token: process.env.SYSTEM_TOKEN
+        }
+      });
+
+      await this.TeleDroid.sendToLogsNew({
+        processName: "Обновление операторской МП",
+        place: "History.copyNewToARES()",
+        date: moment().format("DD.MM.YYYY"),
+        time: moment().format("HH:mm"),
+        message: "Обновление файлов операторской МП успешно завершено!",
+        hashtags: ["mp", "operators", "copyNewToARES"]
+      });
     } catch (err) {
       let error = (typeof err === "string") ? err : err.message;
 
