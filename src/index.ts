@@ -44,7 +44,7 @@ class Server {
     }, null, true, "Europe/Moscow");
 
     new CronJob("0 30 15 * * *", () => {
-      // History.update();
+      History.update();
       Tasks.updateUsersStruct();
     }, null, true, "Europe/Moscow");
   }
