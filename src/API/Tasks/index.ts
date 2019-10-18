@@ -129,6 +129,10 @@ export default class Tasks extends Main {
         {
           source: "\\\\t2ru\\zrfolders\\WFM-Reports\\Day\\ARES\\SM_Evals_Monitoring.xlsx",
           target: "\\\\t2ru\\zrfolders\\Monitoring Personal\\SM_Evals_Monitoring.xlsx"
+        },
+        {
+          source: "\\\\t2ru\\zrfolders\\WFM-Reports\\Day\\ARES\\AppStore_Evals_Monitoring.xlsx",
+          target: "\\\\t2ru\\zrfolders\\Monitoring Personal\\AppStore_Evals_Monitoring.xlsx"
         }
       ];
 
