@@ -24,7 +24,7 @@ import {
 } from "./@types";
 import { cmd, replaceDataBetweenTables, getRowsCount } from "@utils";
 import { refreshDateIdUserOnError } from "./lib";
-import { OperatorsMP } from "../";
+import { OperatorsMP, DevelopmentMP, OBOMP } from "../";
 import moment from "moment";
 import axios from "axios";
 
@@ -381,12 +381,14 @@ export default class History extends Main {
    */
   public updateMP: TFnUpdateMP = async () => {
     await Promise.all([
-      OperatorsMP.update()
+      OperatorsMP.update(),
+      DevelopmentMP.update(),
+      OBOMP.update()
     ]);
 
-    axios({ method: "POST", url: "https://ares:7000/api/tasks/loadOperatorsMP" });
-    axios({ method: "POST", url: "https://ares:7000/api/tasks/loadDevelopmentMP" });
-    axios({ method: "POST", url: "https://ares:7000/api/tasks/loadOboMP" });
+    axios({ method: "POST", url: "http://ares:7000/api/tasks/loadOperatorsMP" });
+    axios({ method: "POST", url: "http://ares:7000/api/tasks/loadDevelopmentMP" });
+    axios({ method: "POST", url: "http://ares:7000/api/tasks/loadOboMP" });
 
     return true;
   }
