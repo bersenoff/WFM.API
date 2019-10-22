@@ -14,3 +14,4 @@ export type TFnCopyToInternalReportCC = () => Promise<boolean>;
 export type TFnCopyToArchiv = () => Promise<boolean>;
 export type TFnCountSeniorPivot = () => Promise<boolean>;
 export type TFnMakeGroupList = () => Promise<boolean>;
+export type TFnUpdateMP = () => Promise<boolean>;

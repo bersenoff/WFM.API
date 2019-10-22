@@ -1,1 +1,1 @@
-export { default as Operators } from "./Operators";
+export { default as OperatorsMP } from "./Operators";

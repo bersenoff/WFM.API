@@ -13,6 +13,7 @@ const copyToInternalReportCC = getRouter("/history/copyToInternalReportCC", asyn
 const copyToArchiv = getRouter("/history/copyToArchiv", async () => await History.copyToArchiv());
 const countSeniorPivot = getRouter("/history/countSeniorPivot", async () => await History.countSeniorPivot());
 const makeGroupList = getRouter("/history/makeGroupList", async () => await History.makeGroupList());
+const updateMP = getRouter("/history/updateMP", async () => await History.updateMP());
 
 export default [
   update,
@@ -26,5 +27,6 @@ export default [
   copyToInternalReportCC,
   copyToArchiv,
   countSeniorPivot,
-  makeGroupList
+  makeGroupList,
+  updateMP
 ];

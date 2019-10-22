@@ -19,13 +19,14 @@ import {
   TFnCopyToInternalReportCC,
   TFnCopyToArchiv,
   TFnCountSeniorPivot,
-  TFnMakeGroupList
+  TFnMakeGroupList,
+  TFnUpdateMP
 } from "./@types";
 import { cmd, replaceDataBetweenTables, getRowsCount } from "@utils";
 import { refreshDateIdUserOnError } from "./lib";
+import { OperatorsMP } from "../";
 import moment from "moment";
 import axios from "axios";
-import { resolve } from "bluebird";
 
 export default class History extends Main {
   constructor() {
@@ -352,6 +353,8 @@ export default class History extends Main {
         hashtags: ["history", "makeGroupList", "historyComplete"]
       });
 
+      this.updateMP();
+
       return true;
     } catch (err) {
       let error = (typeof err === "string") ? err : err.message;
@@ -371,6 +374,21 @@ export default class History extends Main {
         restartUrl
       });
     }
+  }
+
+  /**
+   * Запуск обновления файлов МП и Самоконтроля
+   */
+  public updateMP: TFnUpdateMP = async () => {
+    await Promise.all([
+      OperatorsMP.update()
+    ]);
+
+    axios({ method: "POST", url: "https://ares:7000/api/tasks/loadOperatorsMP" });
+    axios({ method: "POST", url: "https://ares:7000/api/tasks/loadDevelopmentMP" });
+    axios({ method: "POST", url: "https://ares:7000/api/tasks/loadOboMP" });
+
+    return true;
   }
 
   /**
