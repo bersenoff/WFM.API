@@ -19,7 +19,7 @@ export default class OperatorsMP extends Main {
   public update: TFnUpdate = async () => {
     await this.TeleDroid.sendToLogsNew({
       processName: "Обновление операторской МП",
-      place: "History.update()",
+      place: "OperatorsMP.update()",
       date: moment().format("DD.MM.YYYY"),
       time: moment().format("HH:mm"),
       message: "Начинается обновление файлов операторской МП...",
@@ -34,7 +34,7 @@ export default class OperatorsMP extends Main {
     try {
       await this.TeleDroid.sendToLogsNew({
         processName: "Обновление операторской МП",
-        place: "History.collectDataFiles()",
+        place: "OperatorsMP.collectDataFiles()",
         date: moment().format("DD.MM.YYYY"),
         time: moment().format("HH:mm"),
         message: `Запускается скрипт 01-CollectDataFiles.vbs...`,
@@ -42,6 +42,8 @@ export default class OperatorsMP extends Main {
       });
 
       await cmd("cscript X:\\WFM-Reports\\Day\\Motivation\\OperMotivation\\01-CollectDataFiles_new.vbs", [], { shell: true });
+
+      this.copyDataNew();
     } catch (err) {
       let error = (typeof err === "string") ? err : err.message;
 
@@ -53,7 +55,7 @@ export default class OperatorsMP extends Main {
 
       await this.TeleDroid.sendError({
         processName: "Обновление операторской МП",
-        place: "History.collectDataFiles()",
+        place: "OperatorsMP.collectDataFiles()",
         date: moment().format("DD.MM.YYYY"),
         time: moment().format("HH:mm"),
         message: error,
@@ -63,8 +65,6 @@ export default class OperatorsMP extends Main {
       });
     }
 
-    this.copyDataNew();
-
     return true;
   }
 
@@ -72,7 +72,7 @@ export default class OperatorsMP extends Main {
     try {
       await this.TeleDroid.sendToLogsNew({
         processName: "Обновление операторской МП",
-        place: "History.copyDataNew()",
+        place: "OperatorsMP.copyDataNew()",
         date: moment().format("DD.MM.YYYY"),
         time: moment().format("HH:mm"),
         message: `Запускается скрипт 02-CopyDataNew.vbs...`,
@@ -80,6 +80,8 @@ export default class OperatorsMP extends Main {
       });
 
       await cmd("cscript X:\\WFM-Reports\\Day\\Motivation\\OperMotivation\\02-CopyDataNew.vbs", [], { shell: true });
+
+      this.copyNewToSelfControl();
     } catch (err) {
       let error = (typeof err === "string") ? err : err.message;
 
@@ -91,7 +93,7 @@ export default class OperatorsMP extends Main {
 
       await this.TeleDroid.sendError({
         processName: "Обновление операторской МП",
-        place: "History.copyDataNew()",
+        place: "OperatorsMP.copyDataNew()",
         date: moment().format("DD.MM.YYYY"),
         time: moment().format("HH:mm"),
         message: error,
@@ -101,8 +103,6 @@ export default class OperatorsMP extends Main {
       });
     }
 
-    this.copyNewToSelfControl();
-
     return true;
   }
 
@@ -110,7 +110,7 @@ export default class OperatorsMP extends Main {
     try {
       await this.TeleDroid.sendToLogsNew({
         processName: "Обновление операторской МП",
-        place: "History.copyNewToSelfControl()",
+        place: "OperatorsMP.copyNewToSelfControl()",
         date: moment().format("DD.MM.YYYY"),
         time: moment().format("HH:mm"),
         message: `Запускается скрипт 03-CopyNewToSelfControl.vbs...`,
@@ -118,6 +118,8 @@ export default class OperatorsMP extends Main {
       });
 
       await cmd("cscript X:\\WFM-Reports\\Day\\Motivation\\OperMotivation\\03-CopyNewToSelfControl.vbs", [], { shell: true });
+
+      this.copyNewToNewKPI();
     } catch (err) {
       let error = (typeof err === "string") ? err : err.message;
 
@@ -129,7 +131,7 @@ export default class OperatorsMP extends Main {
 
       await this.TeleDroid.sendError({
         processName: "Обновление операторской МП",
-        place: "History.copyNewToSelfControl()",
+        place: "OperatorsMP.copyNewToSelfControl()",
         date: moment().format("DD.MM.YYYY"),
         time: moment().format("HH:mm"),
         message: error,
@@ -139,8 +141,6 @@ export default class OperatorsMP extends Main {
       });
     }
 
-    this.copyNewToNewKPI();
-
     return true;
   }
 
@@ -148,7 +148,7 @@ export default class OperatorsMP extends Main {
     try {
       await this.TeleDroid.sendToLogsNew({
         processName: "Обновление операторской МП",
-        place: "History.copyNewToNewKPI()",
+        place: "OperatorsMP.copyNewToNewKPI()",
         date: moment().format("DD.MM.YYYY"),
         time: moment().format("HH:mm"),
         message: `Запускается скрипт 04-CopyNewToNewKPI.vbs...`,
@@ -156,6 +156,8 @@ export default class OperatorsMP extends Main {
       });
 
       await cmd("cscript X:\\WFM-Reports\\Day\\Motivation\\OperMotivation\\04-CopyNewToNewKPI.vbs", [], { shell: true });
+
+      this.copyNewToARES();
     } catch (err) {
       let error = (typeof err === "string") ? err : err.message;
 
@@ -167,7 +169,7 @@ export default class OperatorsMP extends Main {
 
       await this.TeleDroid.sendError({
         processName: "Обновление операторской МП",
-        place: "History.copyNewToNewKPI()",
+        place: "OperatorsMP.copyNewToNewKPI()",
         date: moment().format("DD.MM.YYYY"),
         time: moment().format("HH:mm"),
         message: error,
@@ -184,7 +186,7 @@ export default class OperatorsMP extends Main {
     try {
       await this.TeleDroid.sendToLogsNew({
         processName: "Обновление операторской МП",
-        place: "History.copyNewToARES()",
+        place: "OperatorsMP.copyNewToARES()",
         date: moment().format("DD.MM.YYYY"),
         time: moment().format("HH:mm"),
         message: `Запускается скрипт 07-CopyNewToARES.vbs...`,
@@ -193,17 +195,9 @@ export default class OperatorsMP extends Main {
 
       await cmd("cscript X:\\WFM-Reports\\Day\\Motivation\\OperMotivation\\07-CopyNewToARES.vbs", [], { shell: true });
 
-      axios({
-        method: "POST",
-        url: "http://ares:7000/tasks/loadOperatorsMP",
-        data: {
-          token: process.env.SYSTEM_TOKEN
-        }
-      });
-
       await this.TeleDroid.sendToLogsNew({
         processName: "Обновление операторской МП",
-        place: "History.copyNewToARES()",
+        place: "OperatorsMP.copyNewToARES()",
         date: moment().format("DD.MM.YYYY"),
         time: moment().format("HH:mm"),
         message: "Обновление файлов операторской МП успешно завершено!",
@@ -219,7 +213,7 @@ export default class OperatorsMP extends Main {
 
       await this.TeleDroid.sendError({
         processName: "Обновление операторской МП",
-        place: "History.copyNewToARES()",
+        place: "OperatorsMP.copyNewToARES()",
         date: moment().format("DD.MM.YYYY"),
         time: moment().format("HH:mm"),
         message: error,
