@@ -11,7 +11,7 @@ import moment from "moment";
 import axios from "axios";
 import { cmd } from "@utils";
 
-export default class Operators extends Main {
+export default class OperatorsMP extends Main {
   constructor() {
     super();
   }
