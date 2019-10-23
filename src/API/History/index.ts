@@ -461,9 +461,9 @@ export default class History extends Main {
 
       const method = "POST";
 
-      await axios({ method, url: "http://ares:7000/tasks/countCritChat" });
-      await axios({ method, url: "http://ares:7000/tasks/countCritGOZ" });
-      await axios({ method, url: "http://ares:7000/tasks/countCritTT" });
+      await axios({ method, url: "http://ares:7000/api/tasks/countCritChat" });
+      await axios({ method, url: "http://ares:7000/api/tasks/countCritGOZ" });
+      await axios({ method, url: "http://ares:7000/api/tasks/countCritTT" });
 
       await this.TeleDroid.sendToLogsNew({
         processName: "Обновление History",
