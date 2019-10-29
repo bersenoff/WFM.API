@@ -137,6 +137,10 @@ export default class Tasks extends Main {
         {
           source: "\\\\t2ru\\zrfolders\\WFM-Reports\\Day\\ARES\\MNP_Evals_Monitoring.xlsx",
           target: "\\\\t2ru\\zrfolders\\Monitoring Personal\\MNP_Evals_Monitoring.xlsx"
+        },
+        {
+          source: "\\\\t2ru\\zrfolders\\WFM-Reports\\Day\\ARES\\MNP_Evals.xlsx",
+          target: "\\\\t2ru\\zrfolders\\InternalReportCC\\MNP_Evals.xlsx"
         }
       ];
 
